@@ -1,6 +1,6 @@
 # Quest Room Database
 
->this project was created for Tugas Teori 7<br>
+>this project was created for Tugas Teori 8br>
 >Pertemuan 9 Pengembangan Aplikasi Mobile<br>
 >Nama: Lu'lu' Luthfiah<br>
 >Nim: 20230140209<br>
