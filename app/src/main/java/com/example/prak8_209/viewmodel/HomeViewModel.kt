@@ -5,11 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.network.HttpException
+//import coil.network.HttpException
 import com.example.prak8_209.model.DataSiswa
 import com.example.prak8_209.repository.RepositoryDataSiswa
 import kotlinx.coroutines.launch
 import okio.IOException
+import retrofit2.HttpException
 
 sealed interface StatusUiSiswa{
     data class Success(val siswa: List<DataSiswa> = listOf()): StatusUiSiswa
