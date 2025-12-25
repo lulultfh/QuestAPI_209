@@ -1,7 +1,7 @@
-# Quest Room Database
+# Quest Local Database
 
->this project was created for Tugas Teori 8br>
->Pertemuan 9 Pengembangan Aplikasi Mobile<br>
+>this project was created for Tugas Teori 12 dan 13<br>
+>Pertemuan 12 dan 13 Pengembangan Aplikasi Mobile<br>
 >Nama: Lu'lu' Luthfiah<br>
 >Nim: 20230140209<br>
 >Kelas: E
