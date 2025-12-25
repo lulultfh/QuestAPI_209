@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -82,6 +83,7 @@ fun DetailSiswaScreen(
             }},
             modifier = Modifier
                 .padding(innerPadding)
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         )
     }
@@ -105,7 +107,7 @@ private fun BodyDetailDataSiswa(
         OutlinedButton(
             onClick = {deleteConfirmationRequired = true},
             shape = MaterialTheme.shapes.small,
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.delete))
         }
@@ -127,7 +129,9 @@ fun DetailDataSiswa(
     siswa: DataSiswa, modifier: Modifier = Modifier
 ){
     Card(
-        modifier = modifier, colors = CardDefaults.cardColors(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_medium)), colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         )
@@ -148,7 +152,7 @@ fun DetailDataSiswa(
         )
         BarisDetailData(
             labelResID = R.string.alamat1,
-            itemDetail = siswa.nama,
+            itemDetail = siswa.alamat,
             modifier = Modifier.padding(
                 horizontal = dimensionResource(
                     R.dimen.padding_medium
@@ -157,7 +161,7 @@ fun DetailDataSiswa(
         )
         BarisDetailData(
             labelResID = R.string.telpon1,
-            itemDetail = siswa.nama,
+            itemDetail = siswa.telpon,
             modifier = Modifier.padding(
                 horizontal = dimensionResource(
                     R.dimen.padding_medium
@@ -184,7 +188,7 @@ private fun DeleteConfirmationDialog(
     onDeleteCancel:() -> Unit,
     modifier: Modifier = Modifier
 ){
-    AlertDialog(onDismissRequest = {/* Do Nothing */},
+    AlertDialog(onDismissRequest = {},
         title = { Text(stringResource(R.string.attention)) },
         text = {Text(stringResource(R.string.tanya))},
         modifier = modifier,
