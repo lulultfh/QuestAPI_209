@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -45,11 +46,11 @@ import com.example.prak8_209.viewmodel.provider.PenyediaViewModel
 @Composable
 fun HomeScreen(
     navigateToItemEntry: () -> Unit,
-    navigateToItemUpdate: (Int) -> Unit,
+    navigateToItemDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ){
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -73,9 +74,9 @@ fun HomeScreen(
     ) { innerPadding ->
         HomeBody(
             statusUiSiswa = viewModel.listSiswa,
-            onSiswaClick = navigateToItemUpdate,
+            onSiswaClick = navigateToItemDetail,
             retryAction = viewModel::loadSiswa,
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         )
@@ -94,13 +95,16 @@ fun HomeBody(
         modifier = modifier
     ) {
         when(statusUiSiswa){
-            is StatusUiSiswa.Loading -> LoadingScreen()
-            is StatusUiSiswa.Success -> DaftarSiswa(itemSiswa = statusUiSiswa
-                .siswa,
-                onSiswaClick = {onSiswaClick(it.id)})
+            is StatusUiSiswa.Loading -> LoadingScreen(modifier = Modifier.fillMaxSize())
+
+            is StatusUiSiswa.Success -> {DaftarSiswa(
+                itemSiswa = statusUiSiswa.siswa,
+                onSiswaClick = {siswa -> onSiswaClick(siswa.id)},
+                modifier = Modifier.fillMaxWidth().weight(1f))
+            }
             is StatusUiSiswa.Error -> ErrorScreen(
-                retryAction,
-                modifier = modifier.fillMaxSize()
+                retryAction = retryAction,
+                modifier = Modifier.fillMaxSize()
             )
         }
     }
@@ -137,7 +141,7 @@ fun DaftarSiswa(
     onSiswaClick:(DataSiswa) -> Unit,
     modifier: Modifier = Modifier
 ){
-    LazyColumn(modifier = Modifier) {
+    LazyColumn(modifier = modifier) {
         items(items = itemSiswa, key = {it.id}){
             person ->
             ItemSiswa(
@@ -181,3 +185,162 @@ fun ItemSiswa(
         }
     }
 }
+
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun HomeScreen(
+//    navigateToItemEntry:()->Unit,
+//    modifier:Modifier= Modifier,
+//    navigateToItemDetail:(Int)->Unit,
+//    viewModel: HomeViewModel= viewModel(factory = PenyediaViewModel.Factory)
+//){
+//    LaunchedEffect (Unit) {
+//        viewModel.loadSiswa()
+//    }
+//    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+//
+//    Scaffold(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+//        topBar = {
+//            SiswaTopAppBar(
+//                title = stringResource(DestinasiHome.titleRes),
+//                canNavigateBack = false,
+//                scrollBehavior = scrollBehavior
+//            )
+//        },
+//        floatingActionButton = {
+//            FloatingActionButton(
+//                onClick = navigateToItemEntry,
+//                shape = MaterialTheme.shapes.medium,
+//                modifier = Modifier.padding(dimensionResource(R.dimen.padding_large))
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Add,
+//                    contentDescription = stringResource(R.string.entry_siswa)
+//                )
+//            }
+//        }) { innerPadding ->
+//        HomeBody(
+//            statusUiSiswa =viewModel.listSiswa,
+//            onSiswaClick = navigateToItemDetail,
+//            retryAction=viewModel::loadSiswa,
+//            modifier = Modifier
+//                .padding(innerPadding)
+//                .fillMaxSize()
+//        )
+//    }
+//}
+//
+//@Composable
+//fun HomeBody(
+//    statusUiSiswa: StatusUiSiswa,
+//    modifier: Modifier = Modifier,
+//    retryAction: () -> Unit,
+//    onSiswaClick: (Int) -> Unit
+//) {
+//    Column(
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        modifier = modifier
+//    ) {
+//        when (statusUiSiswa) {
+//            is StatusUiSiswa.Loading -> LoadingScreen(modifier = Modifier.fillMaxSize())
+//
+//            is StatusUiSiswa.Success -> {
+//                DaftarSiswa(
+//                    itemSiswa = statusUiSiswa.siswa,
+//                    onSiswaClick = { siswa -> onSiswaClick(siswa.id) },
+//                    modifier = Modifier.fillMaxWidth()
+//                )
+//            }
+//
+//            is StatusUiSiswa.Error -> ErrorScreen(
+//                retryAction = retryAction,
+//                modifier = Modifier.fillMaxSize()
+//            )
+//        }
+//    }
+//}
+//
+//@Composable
+//fun LoadingScreen(
+//    modifier: Modifier= Modifier
+//) {
+//    Image(
+//        modifier = modifier.size(200.dp),
+//        painter = painterResource(R.drawable.hanni),
+//        contentDescription = null
+//    )
+//}
+//
+//@Composable
+//fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier= Modifier){
+//    Column (
+//        modifier=modifier,
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ){
+//        Text(text = stringResource(R.string.gagal), modifier = Modifier
+//            .padding(16.dp))
+//        Button(onClick = retryAction) {
+//            Text(stringResource(R.string.retry))
+//
+//        }
+//    }
+//}
+//@Composable
+//fun DaftarSiswa(
+//    itemSiswa: List<DataSiswa>,
+//    onSiswaClick: (DataSiswa) -> Unit,
+//    modifier:Modifier = Modifier
+//){
+//    LazyColumn (modifier = Modifier){
+//        items(items=itemSiswa, key={it.id}){
+//                person->
+//            ItemSiswa(
+//                siswa=person,
+//                modifier=Modifier
+//                    .padding(dimensionResource(R.dimen.padding_small))
+//                    .clickable{onSiswaClick(person)}
+//            )
+//        }
+//    }
+//}
+//
+//@Composable
+//fun ItemSiswa(
+//    siswa: DataSiswa,
+//    modifier: Modifier= Modifier
+//){
+//    Card (modifier = modifier
+//        .padding(dimensionResource(R.dimen.padding_small)),
+//        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+//    ) {
+//        Column(
+//            modifier = Modifier
+//                .padding(all = dimensionResource(R.dimen.padding_large)),
+//            verticalArrangement = Arrangement.spacedBy(space = dimensionResource(R.dimen.padding_small))
+//        ) {
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//            ) {
+//                Text(
+//                    text = siswa.nama,
+//                    style = MaterialTheme.typography.titleLarge,
+//                )
+//                Spacer(modifier = Modifier.weight(weight = 1f))
+//                Icon(
+//                    imageVector = Icons.Default.Phone,
+//                    contentDescription = null,
+//                )
+//                Text(
+//                    text = siswa.telpon,
+//                    style = MaterialTheme.typography.bodyMedium
+//                )
+//            }
+//            Text(
+//                text = siswa.alamat,
+//                style = MaterialTheme.typography.titleMedium
+//            )
+//        }
+//    }
+//}
